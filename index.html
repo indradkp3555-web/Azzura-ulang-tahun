@@ -806,8 +806,19 @@ const bgMusic = document.getElementById('bgMusic');
 
 btnStart.addEventListener('click', () => {
   scene1.classList.add('fade-out');
-  bgMusic.volume = 0.25;
-  bgMusic.play().catch(()=>{});
+  bgMusic.volume = 0; // mulai dari 0 (silent)
+bgMusic.play().catch(()=>{});
+
+// naikkan volume pelan-pelan
+let vol = 0;
+const fadeIn = setInterval(() => {
+  if (vol < 0.25) {
+    vol += 0.01;
+    bgMusic.volume = vol;
+  } else {
+    clearInterval(fadeIn);
+  }
+}, 100); // makin kecil = makin cepat
   setTimeout(() => {
     scene1.style.display = 'none';
     scrollWorld.classList.add('visible');

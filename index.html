@@ -809,19 +809,26 @@ btnStart.addEventListener('click', () => {
   bgMusic.volume = 0; // mulai dari 0 (silent)
 bgMusic.play().catch(()=>{});
   
+bgMusic.volume = 0;
 bgMusic.preload = "auto";
 bgMusic.load();
-  
-// naikkan volume pelan-pelan
-let vol = 0;
-const fadeIn = setInterval(() => {
-  if (vol < 0.25) {
-    vol += 0.01;
-    bgMusic.volume = vol;
-  } else {
-    clearInterval(fadeIn);
-  }
-}, 100); // makin kecil = makin cepat
+
+// tunggu audio bener-bener siap
+bgMusic.addEventListener('canplaythrough', function startMusic() {
+  bgMusic.removeEventListener('canplaythrough', startMusic);
+
+  bgMusic.play().catch(()=>{});
+
+  let vol = 0;
+  const fadeIn = setInterval(() => {
+    if (vol < 0.25) {
+      vol += 0.01;
+      bgMusic.volume = vol;
+    } else {
+      clearInterval(fadeIn);
+    }
+  }, 100);
+});
   setTimeout(() => {
     scene1.style.display = 'none';
     scrollWorld.classList.add('visible');

@@ -808,7 +808,10 @@ btnStart.addEventListener('click', () => {
   scene1.classList.add('fade-out');
   bgMusic.volume = 0; // mulai dari 0 (silent)
 bgMusic.play().catch(()=>{});
-
+  
+bgMusic.preload = "auto";
+bgMusic.load();
+  
 // naikkan volume pelan-pelan
 let vol = 0;
 const fadeIn = setInterval(() => {

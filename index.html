@@ -809,14 +809,13 @@ btnStart.addEventListener('click', () => {
   bgMusic.volume = 0; // mulai dari 0 (silent)
 bgMusic.play().catch(()=>{});
   
-bgMusic.volume = 0;
-bgMusic.preload = "auto";
-bgMusic.load();
+let started = false;
 
-// tunggu audio bener-bener siap
-bgMusic.addEventListener('canplaythrough', function startMusic() {
-  bgMusic.removeEventListener('canplaythrough', startMusic);
+function startMusic() {
+  if (started) return;
+  started = true;
 
+  bgMusic.volume = 0;
   bgMusic.play().catch(()=>{});
 
   let vol = 0;
@@ -828,7 +827,16 @@ bgMusic.addEventListener('canplaythrough', function startMusic() {
       clearInterval(fadeIn);
     }
   }, 100);
-});
+}
+
+bgMusic.preload = "auto";
+bgMusic.load();
+
+// kalau sudah siap → langsung jalan
+bgMusic.addEventListener('canplay', startMusic);
+
+// fallback kalau event nggak ke-trigger
+setTimeout(startMusic, 1000);
   setTimeout(() => {
     scene1.style.display = 'none';
     scrollWorld.classList.add('visible');
